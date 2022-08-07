@@ -1,4 +1,4 @@
 flutter_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/icon/logo/pluto.png"
+  image_path: "assets/icon/pluto.png"
