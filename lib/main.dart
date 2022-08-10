@@ -1,7 +1,125 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pluto/features/authentication/presentation/state/authentication_event.dart';
+import 'package:pluto/features/authentication/presentation/widget/login.dart';
+import 'package:pluto/routes/route.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const App());
+}
+
+class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+        create: (_) => AuthenticationBloc(), child: const AppView());
+  }
+}
+
+class AppView extends StatefulWidget {
+  const AppView({Key? key}) : super(key: key);
+
+  @override
+  State<AppView> createState() => _AppViewState();
+}
+
+class _AppViewState extends State<AppView> {
+  @override
+  Widget build(BuildContext context) {
+    context.read<AuthenticationBloc>().add(LogoutEvent());
+    return MaterialApp(
+      title: 'Pluto',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: BlocConsumer<AuthenticationBloc, AuthenticationState>(
+        listener: (context, state) {
+          // if (state.isLoading) {
+          //   LoadingScreen().show(
+          //       context: context, text: state.loadingText ?? 'Please wait moment');
+          // } else {
+          //   LoadingScreen().hide();
+          // }
+        },
+        builder: ((context, state) {
+          print(state);
+          if (state is LoginState) {
+            print("LoginState");
+            return const LoginTrue();
+          } else if (state is LogoutState) {
+            print("LogoutState");
+            return const LoginFalse();
+          }
+          print("Null");
+          return const Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+}
+
+class LoginTrue extends StatelessWidget {
+  const LoginTrue({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(title: const Text("Login True")),
+          body: Padding(
+            padding: const EdgeInsets.all(16),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const Text("Login True"),
+              Text(state.userName),
+              TextButton(
+                onPressed: () {
+                  context.read<AuthenticationBloc>().add(LogoutEvent());
+                },
+                child: const Text('Log Out II'),
+              )
+            ]),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class LoginFalse extends StatelessWidget {
+  const LoginFalse({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(title: const Text("Login False")),
+          body: Padding(
+            padding: const EdgeInsets.all(16),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const Text("Login False"),
+              Text(state.userName),
+              TextButton(
+                onPressed: () {
+                  context.read<AuthenticationBloc>().add(LoginEvent());
+                },
+                child: const Text('Log In II'),
+              )
+            ]),
+          ),
+        );
+      },
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -14,7 +132,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Pluto'),
+      initialRoute: homePage,
+      routes: {
+        loginPage: (context) => const LoginWidget(),
+        homePage: (context) => const MyHomePage(title: 'Home Page'),
+      },
     );
   }
 }
