@@ -4,6 +4,9 @@ import 'package:pluto/features/authentication/presentation/state/authentication_
 import 'package:pluto/features/authentication/presentation/widget/login.dart';
 import 'package:pluto/routes/route.dart';
 
+import 'features/authentication/presentation/state/authentication_bloc.dart';
+import 'features/authentication/presentation/state/authentication_state.dart';
+
 void main() {
   runApp(const App());
 }
@@ -31,28 +34,17 @@ class _AppViewState extends State<AppView> {
     context.read<AuthenticationBloc>().add(LogoutEvent());
     return MaterialApp(
       title: 'Pluto',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       home: BlocConsumer<AuthenticationBloc, AuthenticationState>(
-        listener: (context, state) {
-          // if (state.isLoading) {
-          //   LoadingScreen().show(
-          //       context: context, text: state.loadingText ?? 'Please wait moment');
-          // } else {
-          //   LoadingScreen().hide();
-          // }
-        },
+        listener: (context, state) {},
         builder: ((context, state) {
-          print(state);
           if (state is LoginState) {
-            print("LoginState");
-            return const LoginTrue();
+            return MyHomePage(
+              title: state.username,
+            );
           } else if (state is LogoutState) {
-            print("LogoutState");
-            return const LoginFalse();
+            return const LoginWidget();
           }
-          print("Null");
           return const Scaffold(
             body: Center(
               child: CircularProgressIndicator(),
@@ -78,7 +70,7 @@ class LoginTrue extends StatelessWidget {
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               const Text("Login True"),
-              Text(state.userName),
+              Text(state.username),
               TextButton(
                 onPressed: () {
                   context.read<AuthenticationBloc>().add(LogoutEvent());
@@ -107,7 +99,7 @@ class LoginFalse extends StatelessWidget {
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               const Text("Login False"),
-              Text(state.userName),
+              Text(state.username),
               TextButton(
                 onPressed: () {
                   context.read<AuthenticationBloc>().add(LoginEvent());
@@ -161,29 +153,49 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(widget.title),
+          ),
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Text(
+                  'You have pushed the button this many times:',
+                ),
+                Text(
+                  '$_counter',
+                  style: Theme.of(context).textTheme.headline4,
+                ),
+                SizedBox(
+                  width: 120,
+                  height: 60,
+                  child: TextButton(
+                    onPressed: () {
+                      context.read<AuthenticationBloc>().add(LogoutEvent());
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.red),
+                    ),
+                    child: const Text(
+                      'Log Out',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: _incrementCounter,
+            tooltip: 'Increment',
+            child: const Icon(Icons.add),
+          ),
+        );
+      },
     );
   }
 }
