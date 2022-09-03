@@ -6,9 +6,14 @@ import 'authentication_event.dart';
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   AuthenticationBloc()
-      : super(AuthenticationState(isLogin: false, username: "")) {
+      : super(AuthenticationState(isLogin: false, email: "", userName: "")) {
     on<LoginEvent>(((event, emit) async {
-      emit(LoginState("User1"));
+      // if (event.email == "pluto1@microservice.com" &&
+      //     event.password == "123456") {
+      //   emit(LoginState(event.email, event.password));
+      // } else {
+      emit(LoginFailedState());
+      // }
     }));
     on<LogoutEvent>(((event, emit) async {
       emit(LogoutState());

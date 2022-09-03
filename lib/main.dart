@@ -35,15 +35,31 @@ class _AppViewState extends State<AppView> {
     return MaterialApp(
       title: 'Pluto',
       theme: ThemeData(primarySwatch: Colors.blue),
+      debugShowCheckedModeBanner: false,
       home: BlocConsumer<AuthenticationBloc, AuthenticationState>(
         listener: (context, state) {},
         builder: ((context, state) {
           if (state is LoginState) {
             return MyHomePage(
-              title: state.username,
+              title: state.email,
             );
           } else if (state is LogoutState) {
             return const LoginWidget();
+          } else if (state is LoginFailedState) {
+            return Scaffold(
+              body: AlertDialog(
+                title: const Text('Authentication Failed'),
+                content: const Text('login faield'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      context.read<AuthenticationBloc>().add(LogoutEvent());
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              ),
+            );
           }
           return const Scaffold(
             body: Center(
@@ -52,64 +68,6 @@ class _AppViewState extends State<AppView> {
           );
         }),
       ),
-    );
-  }
-}
-
-class LoginTrue extends StatelessWidget {
-  const LoginTrue({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(title: const Text("Login True")),
-          body: Padding(
-            padding: const EdgeInsets.all(16),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Text("Login True"),
-              Text(state.username),
-              TextButton(
-                onPressed: () {
-                  context.read<AuthenticationBloc>().add(LogoutEvent());
-                },
-                child: const Text('Log Out II'),
-              )
-            ]),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class LoginFalse extends StatelessWidget {
-  const LoginFalse({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(title: const Text("Login False")),
-          body: Padding(
-            padding: const EdgeInsets.all(16),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Text("Login False"),
-              Text(state.username),
-              TextButton(
-                onPressed: () {
-                  context.read<AuthenticationBloc>().add(LoginEvent());
-                },
-                child: const Text('Log In II'),
-              )
-            ]),
-          ),
-        );
-      },
     );
   }
 }
