@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pluto/features/authentication/presentation/state/authentication_event.dart';
-import 'package:pluto/features/authentication/presentation/widget/login.dart';
-import 'package:pluto/routes/route.dart';
 
-import 'features/authentication/presentation/state/authentication_bloc.dart';
-import 'features/authentication/presentation/state/authentication_state.dart';
+import 'package:pluto/features/authentication/presentation/widget/login.dart';
+
+import 'package:pluto/routes/route.dart';
+import 'features/authentication/presentation/state/authentication/authentication_bloc.dart';
 
 void main() {
   runApp(const App());
@@ -16,8 +15,12 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (_) => AuthenticationBloc(), child: const AppView());
+    final authenticationBloc =
+        BlocProvider<AuthenticationBloc>(create: (context) {
+      return AuthenticationBloc();
+    });
+    return MultiBlocProvider(
+        providers: [authenticationBloc], child: const AppView());
   }
 }
 
@@ -37,35 +40,27 @@ class _AppViewState extends State<AppView> {
       theme: ThemeData(primarySwatch: Colors.blue),
       debugShowCheckedModeBanner: false,
       home: BlocConsumer<AuthenticationBloc, AuthenticationState>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          // if (state is LoginState) {
+          //   ScaffoldMessenger.of(context)
+          //       .showSnackBar(SnackBar(content: Text('LoginState')));
+          // }
+          // if (state is LogoutState) {
+          //   ScaffoldMessenger.of(context)
+          //       .showSnackBar(SnackBar(content: Text('LogoutState')));
+          // }
+          // if (state is LoginFailedState) {
+          //   ScaffoldMessenger.of(context)
+          //       .showSnackBar(SnackBar(content: Text('Authentication Failed')));
+          // }
+        },
         builder: ((context, state) {
           if (state is LoginState) {
             return MyHomePage(
               title: state.email,
             );
-          } else if (state is LogoutState) {
-            return const LoginWidget();
-          } else if (state is LoginFailedState) {
-            return Scaffold(
-              body: AlertDialog(
-                title: const Text('Authentication Failed'),
-                content: const Text('login faield'),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      context.read<AuthenticationBloc>().add(LogoutEvent());
-                    },
-                    child: const Text('OK'),
-                  ),
-                ],
-              ),
-            );
           }
-          return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
+          return const LoginWidget();
         }),
       ),
     );
