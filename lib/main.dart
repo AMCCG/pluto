@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pluto/constants/constants.dart';
 
 import 'package:pluto/features/authentication/presentation/widget/login.dart';
 
@@ -37,7 +38,7 @@ class _AppViewState extends State<AppView> {
   Widget build(BuildContext context) {
     context.read<AuthenticationBloc>().add(const InitLoginEvent());
     return MaterialApp(
-      title: 'Pluto',
+      title: Constant.pluto,
       theme: ThemeData(primarySwatch: Colors.blue),
       debugShowCheckedModeBanner: false,
       home: BlocConsumer<AuthenticationBloc, AuthenticationState>(

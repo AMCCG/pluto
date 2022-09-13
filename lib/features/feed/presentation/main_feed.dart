@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pluto/features/feed/presentation/app_bar_layout.dart';
 
 import '../../authentication/presentation/state/authentication/authentication_bloc.dart';
 import '../../authentication/presentation/widget/loading.dart';
@@ -27,9 +28,7 @@ class _MainFeedPageState extends State<MainFeedPage> {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(
-            title: Text(widget.title),
-          ),
+          appBar: AppBarLayout.getAppBar(context),
           body: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -39,41 +38,20 @@ class _MainFeedPageState extends State<MainFeedPage> {
                     if (state is LogoutLoadingState) {
                       return LoadingWidget.loadingS(context);
                     }
-                    return Column(
-                      children: [
-                        Text(
-                          state.email,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          state.userName,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          width: 120,
-                          height: 60,
-                          child: TextButton(
-                            onPressed: () {
-                              context
-                                  .read<AuthenticationBloc>()
-                                  .add(const LogoutEvent());
-                            },
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.red),
-                            ),
-                            child: const Text(
-                              'Log Out',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
+                    return Container();
                   },
                 ),
-                const Text(
-                  'You have pushed the button this many times:',
+                Text(
+                  state.email,
+                  style: const TextStyle(
+                      fontSize: 30, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  state.userName,
+                  style: const TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 Text(
                   '$_counter',
