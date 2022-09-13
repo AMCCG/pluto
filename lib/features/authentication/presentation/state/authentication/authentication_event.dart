@@ -10,6 +10,10 @@ abstract class AuthenticationEvent extends Equatable {
   List<Object?> get props => [email, password];
 }
 
+class InitLoginEvent extends AuthenticationEvent {
+  const InitLoginEvent() : super('', '');
+}
+
 class LoginEvent extends AuthenticationEvent {
   const LoginEvent(email, password) : super(email, password);
 }

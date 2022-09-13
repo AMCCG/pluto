@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pluto/features/authentication/presentation/widget/loading.dart';
 import '../state/authentication/authentication_bloc.dart';
 
 import 'login_form.dart';
@@ -28,17 +29,18 @@ class _LoginWidgetState extends State<LoginWidget> {
             children: [
               Stack(
                 children: [
-                  LoginForm(),
+                  BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                      builder: (context, state) {
+                    if (state is AuthenticationInitialLoadingState) {
+                      return LoadingWidget.loadingM(context);
+                    } else {
+                      return const LoginForm();
+                    }
+                  }),
                   BlocBuilder<AuthenticationBloc, AuthenticationState>(
                       builder: (context, state) {
                     if (state is LoginLoadingState) {
-                      return Center(
-                        child: Container(
-                            width: 150,
-                            height: 150,
-                            color: Colors.white.withOpacity(.1),
-                            child: const CircularProgressIndicator()),
-                      );
+                      return LoadingWidget.loadingM(context);
                     }
                     if (state is LoginFailedState) {
                       return AlertDialog(
@@ -49,14 +51,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                             onPressed: () {
                               context
                                   .read<AuthenticationBloc>()
-                                  .add(LogoutEvent());
+                                  .add(const LogoutEvent());
                             },
                             child: const Text('OK'),
                           ),
                         ],
                       );
                     }
-                    return SizedBox();
+                    return const SizedBox();
                   }),
                 ],
               ),

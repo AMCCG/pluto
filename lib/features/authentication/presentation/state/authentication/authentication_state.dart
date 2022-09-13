@@ -15,19 +15,27 @@ class AuthenticationInitial extends AuthenticationState {
   const AuthenticationInitial() : super(false, "", "");
 }
 
+class AuthenticationInitialLoadingState extends AuthenticationState {
+  const AuthenticationInitialLoadingState() : super(false, "", "");
+}
+
 class LoginState extends AuthenticationState {
   const LoginState({required isLogin, required email, required userName})
       : super(isLogin, email, userName);
+}
+
+class LoginLoadingState extends AuthenticationState {
+  const LoginLoadingState() : super(false, "", "");
 }
 
 class LogoutState extends AuthenticationState {
   const LogoutState() : super(false, "", "");
 }
 
-class LoginFailedState extends AuthenticationState {
-  const LoginFailedState() : super(false, "", "");
+class LogoutLoadingState extends AuthenticationState {
+  const LogoutLoadingState() : super(false, "", "");
 }
 
-class LoginLoadingState extends AuthenticationState {
-  LoginLoadingState() : super(false, "", "");
+class LoginFailedState extends AuthenticationState {
+  const LoginFailedState() : super(false, "", "");
 }
