@@ -3,10 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pluto/constants/constants.dart';
 
 import 'package:pluto/features/authentication/presentation/widget/login.dart';
+import 'package:pluto/features/register/presentation/state/register/register_bloc.dart';
+import 'package:pluto/features/register/presentation/widget/register_page.dart';
 
 import 'package:pluto/routes/route.dart';
 import 'features/authentication/presentation/state/authentication/authentication_bloc.dart';
-import 'features/feed/presentation/main_feed.dart';
+import 'features/authentication/presentation/widget/authentication.dart';
 
 void main() {
   runApp(const App());
@@ -21,8 +23,11 @@ class App extends StatelessWidget {
         BlocProvider<AuthenticationBloc>(create: (context) {
       return AuthenticationBloc();
     });
+    final registerBloc = BlocProvider<RegisterBloc>(create: (context) {
+      return RegisterBloc();
+    });
     return MultiBlocProvider(
-        providers: [authenticationBloc], child: const AppView());
+        providers: [authenticationBloc, registerBloc], child: const AppView());
   }
 }
 
@@ -41,30 +46,12 @@ class _AppViewState extends State<AppView> {
       title: Constant.pluto,
       theme: ThemeData(primarySwatch: Colors.blue),
       debugShowCheckedModeBanner: false,
-      home: BlocConsumer<AuthenticationBloc, AuthenticationState>(
-        listener: (context, state) {
-          // if (state is LoginState) {
-          //   ScaffoldMessenger.of(context)
-          //       .showSnackBar(SnackBar(content: Text('LoginState')));
-          // }
-          // if (state is LogoutState) {
-          //   ScaffoldMessenger.of(context)
-          //       .showSnackBar(SnackBar(content: Text('LogoutState')));
-          // }
-          // if (state is LoginFailedState) {
-          //   ScaffoldMessenger.of(context)
-          //       .showSnackBar(SnackBar(content: Text('Authentication Failed')));
-          // }
-        },
-        builder: ((context, state) {
-          if (state is LoginState || state is LogoutLoadingState) {
-            return MainFeedPage(
-              title: state.userName,
-            );
-          }
-          return const LoginWidget();
-        }),
-      ),
+      initialRoute: '/authentication',
+      routes: {
+        '/authentication': (context) => const AuthenticationPage(),
+        '/register': (context) => const RegisterPage(),
+      },
+      // home: AuthenticationPage(),
     );
   }
 }

@@ -58,11 +58,11 @@ class _LoginFormState extends State<LoginForm> {
             },
           ),
           const SizedBox(
-            height: 30,
+            height: 20,
           ),
           SizedBox(
             width: 120,
-            height: 60,
+            height: 50,
             child: TextButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
@@ -75,6 +75,30 @@ class _LoginFormState extends State<LoginForm> {
               ),
               child: const Text(
                 'Log In',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+          const Divider(
+            indent: 0,
+            endIndent: 0,
+            height: 40,
+            color: Colors.grey,
+            thickness: 1,
+          ),
+          SizedBox(
+            width: 120,
+            child: TextButton(
+              onPressed: () {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/register', ModalRoute.withName('/'));
+                // context.read<RegisterBloc>().add(RegisterInitialEvent());
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.green),
+              ),
+              child: const Text(
+                'Register',
                 style: TextStyle(color: Colors.white),
               ),
             ),
