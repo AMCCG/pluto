@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../register/presentation/state/register/register_bloc.dart';
 import '../state/authentication/authentication_bloc.dart';
 
 class LoginForm extends StatefulWidget {
@@ -90,9 +91,9 @@ class _LoginFormState extends State<LoginForm> {
             width: 120,
             child: TextButton(
               onPressed: () {
+                context.read<RegisterBloc>().add(RegisterInitialEvent());
                 Navigator.pushNamedAndRemoveUntil(
                     context, '/register', ModalRoute.withName('/'));
-                // context.read<RegisterBloc>().add(RegisterInitialEvent());
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.green),

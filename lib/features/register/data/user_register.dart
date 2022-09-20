@@ -1,8 +1,9 @@
 class UserRegister {
-  late String firstName;
-  late String lastName;
-  late DateTime dateTime;
-  late String gender;
-  late String email;
-  late String password;
+  String? firstName;
+  String? lastName;
+  String? email;
+  DateTime? dateTime;
+  int? age;
+  String? gender;
+  String? password;
 }
