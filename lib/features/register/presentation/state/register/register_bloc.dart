@@ -23,7 +23,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       emit(RegisterInputEmailState(registerState.userRegister));
     });
     on<RegisterInputDateOfBirthEvent>((event, emit) {
-      RegisterState registerState = state.copyWith();
+      RegisterState registerState =
+          state.copyWith(dateOfBirth: event.dateOfBirth, age: event.age);
       emit(RegisterInputDateOfBirthState(registerState.userRegister));
     });
   }

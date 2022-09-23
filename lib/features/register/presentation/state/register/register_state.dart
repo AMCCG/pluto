@@ -8,7 +8,12 @@ class RegisterState extends Equatable {
   @override
   List<Object> get props => [userRegister];
 
-  RegisterState copyWith({String? firstName, String? lastName, String? email}) {
+  RegisterState copyWith(
+      {String? firstName,
+      String? lastName,
+      String? email,
+      DateTime? dateOfBirth,
+      int? age}) {
     UserRegister userRegister = UserRegister();
     if (this.userRegister.firstName == null) {
       userRegister.firstName = firstName ?? '';
@@ -24,6 +29,16 @@ class RegisterState extends Equatable {
       userRegister.email = email ?? '';
     } else {
       userRegister.email = email ?? this.userRegister.email;
+    }
+    if (this.userRegister.dateOfBirth == null) {
+      userRegister.dateOfBirth = dateOfBirth ?? DateTime.now();
+    } else {
+      userRegister.dateOfBirth = dateOfBirth ?? this.userRegister.dateOfBirth;
+    }
+    if (this.userRegister.age == null) {
+      userRegister.age = age ?? 0;
+    } else {
+      userRegister.age = age ?? this.userRegister.age;
     }
     return RegisterState(userRegister);
   }
@@ -47,4 +62,8 @@ class RegisterInputEmailState extends RegisterState {
 
 class RegisterInputDateOfBirthState extends RegisterState {
   const RegisterInputDateOfBirthState(super.userRegister);
+}
+
+class RegisterDisplayDetailState extends RegisterState {
+  const RegisterDisplayDetailState(super.userRegister);
 }

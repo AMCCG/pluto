@@ -24,9 +24,9 @@ class RegisterInputEmailEvent extends RegisterEvent {
 }
 
 class RegisterInputDateOfBirthEvent extends RegisterEvent {
-  final DateTime dateTime;
+  final DateTime dateOfBirth;
   final int age;
 
   const RegisterInputDateOfBirthEvent(
-      {required this.dateTime, required this.age});
+      {required this.dateOfBirth, required this.age});
 }

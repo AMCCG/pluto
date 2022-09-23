@@ -2,7 +2,7 @@ class UserRegister {
   String? firstName;
   String? lastName;
   String? email;
-  DateTime? dateTime;
+  DateTime? dateOfBirth;
   int? age;
   String? gender;
   String? password;
